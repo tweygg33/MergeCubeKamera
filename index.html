@@ -6,8 +6,34 @@
     <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js/aframe/build/aframe-ar.js"></script>
   </head>
   <body style="margin: 0; overflow: hidden;">
-    <a-scene embedded id="scene">
-      <!-- Ihr AR-Inhalt hier -->
+        <a-scene embedded id="scene" arjs='sourceType: webcam; videoConstraints: {"facingMode": {"ideal": "environment"}}'>
+
+    
+      
+            <!-- <a-marker preset='hiro'>
+              <a-box position='0 0.5 0' material='color: blue;' scale='0.5 0.5 0.5'></a-box>
+            </a-marker> -->
+              <!-- First Hiro Marker showing model from angle 1 -->
+              <!-- <a-marker preset='hiro'> -->
+                  <!-- GLB Model - Angle 1 -->
+                  <!-- <a-entity
+                    gltf-model="url(free_porsche_911_carrera_4s.glb)"
+                    scale="0.5 0.5 0.5"
+                    position="0 0 0"
+                    rotation="270 270 90">
+                  </a-entity> -->
+              <!-- </a-marker> -->
+       
+              <!-- Second Hiro Marker showing model from angle 2 -->
+              <a-marker type="pattern" url="patter\cube1.patt"> <!-- You can change 'kanji' to a different marker -->
+                  <!-- GLB Model - Angle 2 -->
+                  <a-entity
+                    gltf-model="url(free_porsche_911_carrera_4s.glb)"
+                    scale="0.4 0.4 0.4"
+                    position="0 0 0"
+                    rotation="0 -45 0">
+                  </a-entity>
+              </a-marker>
     </a-scene>
 
     <script>
