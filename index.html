@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AR.js Multiple Markers Example</title>
+    <!-- Include A-Frame and AR.js -->
+    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    <script src="https://cdn.rawgit.com/jeromeetienne/ar.js/1.7.2/aframe/build/aframe-ar.js"></script>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        #info {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <div id="info">
+        <h2>AR.js Multiple Hiro Marker Example</h2>
+        <p>Point your camera at different Hiro markers to see the model from different angles.</p>
+    </div>
+ 
+    <a-scene embedded arjs='sourceType: webcam;'>
+      
+      <!-- <a-marker preset='hiro'>
+        <a-box position='0 0.5 0' material='color: blue;' scale='0.5 0.5 0.5'></a-box>
+      </a-marker> -->
+        <!-- First Hiro Marker showing model from angle 1 -->
+        <!-- <a-marker preset='hiro'> -->
+            <!-- GLB Model - Angle 1 -->
+            <!-- <a-entity
+              gltf-model="url(free_porsche_911_carrera_4s.glb)"
+              scale="0.5 0.5 0.5"
+              position="0 0 0"
+              rotation="270 270 90">
+            </a-entity> -->
+        <!-- </a-marker> -->
+ 
+        <!-- Second Hiro Marker showing model from angle 2 -->
+        <a-marker type="pattern" url="patter\pattern-Deutsche_Rentenversicherung_logo.svg.patt"> <!-- You can change 'kanji' to a different marker -->
+            <!-- GLB Model - Angle 2 -->
+            <a-entity
+              gltf-model="url(free_porsche_911_carrera_4s.glb)"
+              scale="0.4 0.4 0.4"
+              position="0 0 0"
+              rotation="0 -45 0">
+            </a-entity>
+        </a-marker>
+ 
+        <!-- Camera -->
+        <a-entity camera></a-entity>
+    </a-scene>
+</body>
+</html>
+
+
