@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AR.js Mehrere Marker Beispiel</title>
-    <!-- Einbindung von A-Frame und AR.js -->
+    <title>AR.js Multiple Markers Example</title>
+    <!-- Include A-Frame and AR.js -->
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js@3.3.2/aframe/build/aframe-ar.js"></script>
  
@@ -27,61 +27,88 @@
 </head>
 <body>
     <div id="info">
-        <h2>AR.js Mehrere Marker Beispiel</h2>
-        <p>Richte die Kamera auf die verschiedenen Marker, um das Modell aus unterschiedlichen Perspektiven zu sehen.</p>
+        <h2>AR.js Multiple Hiro Marker Example</h2>
+        <p>Point your camera at different Hiro markers to see the model from different angles.</p>
     </div>
  
     <a-scene embedded arjs='sourceType: webcam;'>
-        
-        <!-- Das Modell wird einmal geladen -->
-        <a-entity id="model" gltf-model="url(free_porsche_911_carrera_4s.glb)" scale="0.2 0.2 0.2" visible="false"></a-entity>
-
-        <!-- Marker 1 -->
-        <a-marker type="pattern" url="pattern-DRV1.patt" marker-handler="model: #model; position: 0 0 0; rotation: 0 0 0;"></a-marker>
-
-        <!-- Marker 2 -->
-        <a-marker type="pattern" url="pattern-DRV2.patt" marker-handler="model: #model; position: 1 0 0; rotation: 0 -90 90;"></a-marker>
-
-        <!-- Marker 3 -->
-        <a-marker type="pattern" url="pattern-DRV3.patt" marker-handler="model: #model; position: -1 0 0; rotation: 0 90 -90;"></a-marker>
-
-        <!-- Marker 4 -->
-        <a-marker type="pattern" url="pattern-DRV4.patt" marker-handler="model: #model; position: 0 1 0; rotation: -90 0 0;"></a-marker>
-
-        <!-- Marker 5 -->
-        <a-marker type="pattern" url="pattern-DRV5.patt" marker-handler="model: #model; position: 0 -1 0; rotation: 90 0 180;"></a-marker>
-
-        <!-- Marker 6 -->
-        <a-marker type="pattern" url="pattern-DRV6.patt" marker-handler="model: #model; position: 0 0 0; rotation: 0 0 180;"></a-marker>
-        
-        <!-- Kamera -->
+        <!-- First Hiro Marker showing model from angle 1 -->
+        <!-- <a-marker preset='hiro'> -->
+            <!-- GLB Model - Angle 1 -->
+            <!-- <a-entity
+              gltf-model="url(futuristic_building(1).glb)"
+              scale="0.08 0.08 0.08"
+              position="0 0 0"
+              rotation="270 270 90">
+            </a-entity>
+        </a-marker> -->
+ 
+        <!-- Second Hiro Marker showing model from angle 2 -->
+        <a-marker type="pattern" url="pattern-DRV1.patt"> <!-- You can change 'kanji' to a different marker -->
+            <!-- GLB Model - Angle 1 Top -->
+            <a-entity
+              gltf-model="url(free_porsche_911_carrera_4s.glb)"
+              scale="0.4 0.4 0.4"
+              position="0 0 0"
+              rotation="0 0 0">
+            </a-entity>
+        </a-marker>
+ 
+        <a-marker type="pattern" url="pattern-DRV2.patt"> <!-- You can change 'kanji' to a different marker -->
+            <!-- GLB Model - Angle 2 Side Left -->
+            <a-entity
+              gltf-model="url(free_porsche_911_carrera_4s.glb)"
+              scale="0.4 0.4 0.4"
+              position="0 0 0"
+              rotation="0 -90 90">
+            </a-entity>
+        </a-marker>
+ 
+        <a-marker type="pattern" url="pattern-DRV3.patt"> <!-- You can change 'kanji' to a different marker -->
+            <!-- GLB Model - Angle 3 Right -->
+            <a-entity
+              gltf-model="url(free_porsche_911_carrera_4s.glb)"
+              scale="0.4 0.4 0.4"
+              position="0 0 0"
+              rotation="0 90 -90">
+            </a-entity>
+        </a-marker>
+ 
+        <a-marker type="pattern" url="pattern-DRV4.patt"> <!-- You can change 'kanji' to a different marker -->
+            <!-- GLB Model - Angle 4 Front -->
+            <a-entity
+              gltf-model="url(free_porsche_911_carrera_4s.glb)"
+              scale="0.4 0.4 0.4"
+              position="0 0 0"
+              rotation="-90 0 0">
+            </a-entity>
+        </a-marker>
+ 
+        <a-marker type="pattern" url="pattern-DRV5.patt"> <!-- You can change 'kanji' to a different marker -->
+            <!-- GLB Model - Angle 5 Back -->
+            <a-entity
+              gltf-model="url(free_porsche_911_carrera_4s.glb)"
+              scale="0.4 0.4 0.4"
+              position="0 0 0"
+              rotation="90 0 180">
+            </a-entity>
+        </a-marker>
+       
+        <a-marker type="pattern" url="pattern-DRV6.patt"> <!-- You can change 'kanji' to a different marker -->
+            <!-- GLB Model - Angle 5 bottom-->
+            <a-entity
+              gltf-model="url(free_porsche_911_carrera_4s.glb)"
+              scale="0.4 0.4 0.4"
+              position="0 0 0"
+              rotation="0 0 180">
+            </a-entity>
+        </a-marker>
+        <!-- Camera -->
         <a-entity camera></a-entity>
  
-    </a-scene>
- <!-- ts -->
-    <script>
-        AFRAME.registerComponent('marker-handler', {
-            schema: {
-                model: {type: 'selector'},
-                position: {type: 'vec3'},
-                rotation: {type: 'vec3'}
-            },
-            init: function () {
-                const marker = this.el;
-                const model = this.data.model;
-
-                marker.addEventListener('markerFound', () => {
-                    model.setAttribute('visible', true);
-                    model.setAttribute('position', this.data.position);
-                    model.setAttribute('rotation', this.data.rotation);
-                });
-
-                marker.addEventListener('markerLost', () => {
-                    model.setAttribute('visible', false);
-                });
-            }
-        });
-    </script>
  
+    </a-scene>
+ 
+   
 </body>
 </html>
