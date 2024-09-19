@@ -111,37 +111,51 @@
  
     <script>
         async function initFrontCamera() {
-            const constraints = {
-                video: {
-                    facingMode: { ideal: 'user' }, // Front camera
-                    width: { ideal: 1280 },
-                    height: { ideal: 720 }
-                }
-            };
-   
-            try {
-                const stream = await navigator.mediaDevices.getUserMedia(constraints);
-                const video = document.createElement('video');
-                video.srcObject = stream;
-                video.setAttribute('autoplay', '');
-                video.setAttribute('muted', '');
-                video.setAttribute('playsinline', '');
-                document.body.appendChild(video);
-   
-                // Wait for the video stream to be ready
-                video.onloadedmetadata = () => {
-                    const arSystem = document.querySelector('a-scene').systems['arjs'];
-                    arSystem.sourceElement = video;
-                    arSystem._initSource = function () {
-                        this.context.arController.setVideo(video);
-                        this.context.arController.setup(video);
-                    };
-                    arSystem.start();
-                };
-            } catch (error) {
-                console.error('Error accessing front camera:', error);
-            }
+    const constraints = {
+        video: {
+            facingMode: { ideal: 'user' }, // Frontkamera
+            width: { ideal: 1280 },
+            height: { ideal: 720 }
         }
+    };
+
+    try {
+        // Zugriff auf die Kamera
+        const stream = await navigator.mediaDevices.getUserMedia(constraints);
+        
+        // Videoelement erstellen und stream hinzufügen
+        const video = document.createElement('video');
+        video.srcObject = stream;
+        video.setAttribute('autoplay', '');
+        video.setAttribute('muted', '');
+        video.setAttribute('playsinline', '');
+        document.body.appendChild(video);
+
+        // Warten, bis das Video geladen ist
+        video.onloadedmetadata = () => {
+            const arSystem = document.querySelector('a-scene').systems['arjs'];
+
+            // Frontkamera als Quelle für AR.js festlegen
+            arSystem.sourceElement = video;
+
+            // AR.js initialisieren, damit es die neue Videoquelle verwendet
+            arSystem._initSource = function () {
+                this.context.arController.setVideo(video);
+                this.context.arController.setup(video);
+            };
+
+            // Manuelles Update von AR.js nach dem Ändern der Quelle
+            arSystem.source.ready = true;
+            arSystem.onResize();
+        };
+    } catch (error) {
+        console.error('Fehler beim Zugriff auf die Frontkamera:', error);
+    }
+}
+
+// Funktion aufrufen, um die Frontkamera zu initialisieren
+initFrontCamera();
+
    
         window.onload = () => {
             initFrontCamera();
@@ -159,7 +173,7 @@
                 this.el.sceneEl.addEventListener('markerFound', (event) => {
                     console.log('Face marker found');
                     const faceSunglassesModel = document.querySelector('#faceSunglassesModel');
-                    faceSunglassesModel.setAttribute('visible', 'false');
+                    faceSunglassesModel.setAttribute('visible', 'true');
                     const staticSunglassesModel = document.querySelector('#sunglassesModel');
                     staticSunglassesModel.setAttribute('visible', 'false');
                 });
