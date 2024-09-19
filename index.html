@@ -130,19 +130,21 @@
    
                 // Wait for the video stream to be ready
                 video.onloadedmetadata = () => {
-                    const arSystem = document.querySelector('a-scene').systems['arjs'];
-                    arSystem.sourceElement = video;
-                    arSystem._initSource = function () {
-                        this.context.arController.setVideo(video);
-                        this.context.arController.setup(video);
-                    };
-                    arSystem.start();
-                };
-            } catch (error) {
-                console.error('Error accessing front camera:', error);
+        const arSystem = document.querySelector('a-scene').systems['arjs'];
+        if (arSystem) {
+            arSystem.sourceElement = video;
+            if (arSystem.context && arSystem.context.arController) {
+                arSystem.context.arController.setVideo(video);
+                arSystem.context.arController.setup(video);
             }
+        } else {
+            console.error('AR.js system not found.');
+                }
+            };
+        } catch (error) {
+            console.error('Error accessing front camera:', error);
         }
-   
+    }
         window.onload = () => {
             initFrontCamera();
         };
