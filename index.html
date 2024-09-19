@@ -33,7 +33,7 @@
  
     <a-scene embedded arjs='sourceType: webcam;'>
         
-        <!-- Das Modell wird einmal geladen und bleibt sichtbar -->
+        <!-- Das Modell wird einmal geladen -->
         <a-entity id="model" gltf-model="url(free_porsche_911_carrera_4s.glb)" scale="0.4 0.4 0.4" visible="false"></a-entity>
 
         <!-- Marker 1 -->
@@ -70,24 +70,15 @@
                 const marker = this.el;
                 const model = this.data.model;
 
-                // Marker gefunden: Das Modell anzeigen und Position/Rotation ändern
+                // Eventlistener, wenn der Marker erkannt wird
                 marker.addEventListener('markerFound', () => {
+                    // Sichtbar machen und die Position/Rotation ändern
                     model.setAttribute('visible', true);
                     model.setAttribute('position', this.data.position);
                     model.setAttribute('rotation', this.data.rotation);
-                    this.startRotation();
                 });
-            },
 
-            startRotation: function () {
-                const model = this.data.model;
-
-                // Endlose Rotation hinzufügen
-                this.el.sceneEl.addEventListener('tick', function () {
-                    const rotation = model.getAttribute('rotation');
-                    rotation.y += 1;  // Dreht das Modell kontinuierlich um die Y-Achse
-                    model.setAttribute('rotation', rotation);
-                });
+                // Keine Reaktion auf 'markerLost', sodass das Modell sichtbar bleibt
             }
         });
     </script>
