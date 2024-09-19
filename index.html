@@ -6,7 +6,8 @@
     <title>AR.js Multiple Markers Example</title>
     <!-- Include A-Frame and AR.js -->
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
-    <script src="https://cdn.rawgit.com/jeromeetienne/ar.js/1.7.2/aframe/build/aframe-ar.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js@3.3.2/aframe/build/aframe-ar.js"></script>
+
     <style>
         body, html {
             margin: 0;
@@ -30,23 +31,17 @@
         <p>Point your camera at different Hiro markers to see the model from different angles.</p>
     </div>
  
-    <a-scene embedded arjs='sourceType: webcam; videoConstraints: {"facingMode": {"exact": "environment"}, "width": {"ideal": 1280}}'>
-
-    
-      
-      <!-- <a-marker preset='hiro'>
-        <a-box position='0 0.5 0' material='color: blue;' scale='0.5 0.5 0.5'></a-box>
-      </a-marker> -->
+    <a-scene embedded arjs='sourceType: webcam;'>
         <!-- First Hiro Marker showing model from angle 1 -->
         <!-- <a-marker preset='hiro'> -->
             <!-- GLB Model - Angle 1 -->
             <!-- <a-entity
-              gltf-model="url(free_porsche_911_carrera_4s.glb)"
-              scale="0.5 0.5 0.5"
+              gltf-model="url(futuristic_building(1).glb)"
+              scale="0.08 0.08 0.08"
               position="0 0 0"
               rotation="270 270 90">
-            </a-entity> -->
-        <!-- </a-marker> -->
+            </a-entity>
+        </a-marker> -->
  
         <!-- Second Hiro Marker showing model from angle 2 -->
         <a-marker type="pattern" url="pattern-DRV 1.patt"> <!-- You can change 'kanji' to a different marker -->
@@ -113,8 +108,6 @@
 
 
     </a-scene>
-
-
 
     <script>
         async function initFrontCamera() {
@@ -223,5 +216,3 @@
     </script>
 </body>
 </html>
-
-
