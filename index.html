@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AR.js Multiple Markers Example</title>
+    <title>AR.js Multi-Marker Example</title>
     <!-- Include A-Frame and AR.js -->
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js@3.3.2/aframe/build/aframe-ar.js"></script>
@@ -27,89 +27,51 @@
 </head>
 <body>
     <div id="info">
-        <h2>AR.js Multiple Hiro Marker Example</h2>
-        <p>Point your camera at different Hiro markers to see the model from different angles.</p>
+        <h2>AR.js Multi-Marker Example</h2>
+        <p>Point your camera at the markers to see the model rotate seamlessly.</p>
     </div>
- 
+
     <a-scene embedded arjs='sourceType: webcam;'>
-        <!-- First Hiro Marker showing model from angle 1 -->
-        <!-- <a-marker preset='hiro'> -->
-            <!-- GLB Model - Angle 1 -->
-            <!-- <a-entity
-              gltf-model="url(futuristic_building(1).glb)"
-              scale="0.08 0.08 0.08"
-              position="0 0 0"
-              rotation="270 270 90">
-            </a-entity>
-        </a-marker> -->
- 
-        <!-- Second Hiro Marker showing model from angle 2 -->
-        <a-marker type="pattern" url="pattern-DRV 1.patt"> <!-- You can change 'kanji' to a different marker -->
-            <!-- GLB Model - Angle 1 Top -->
+        <!-- Multi-Marker Entity: All Markers work together -->
+        <a-entity multi-marker="type: pattern; url: multiMarkerFile.json" id="multiMarker">
+            <!-- GLB Model: Porsche, initially hidden -->
             <a-entity
+              id="porscheModel"
               gltf-model="url(free_porsche_911_carrera_4s.glb)"
               scale="0.4 0.4 0.4"
               position="0 0 0"
-              rotation="0 0 0">
+              rotation="0 0 0"
+              visible="false">
             </a-entity>
-        </a-marker>
+        </a-entity>
 
-        <a-marker type="pattern" url="pattern-DRV2.patt"> <!-- You can change 'kanji' to a different marker -->
-            <!-- GLB Model - Angle 2 Side Left -->
-            <a-entity
-              gltf-model="url(free_porsche_911_carrera_4s.glb)"
-              scale="0.4 0.4 0.4"
-              position="0 0 0"
-              rotation="0 -90 90">
-            </a-entity>
-        </a-marker>
-
-        <a-marker type="pattern" url="pattern-DRV3.patt"> <!-- You can change 'kanji' to a different marker -->
-            <!-- GLB Model - Angle 3 Right -->
-            <a-entity
-              gltf-model="url(free_porsche_911_carrera_4s.glb)"
-              scale="0.4 0.4 0.4"
-              position="0 0 0"
-              rotation="0 90 -90">
-            </a-entity>
-        </a-marker>
-
-        <a-marker type="pattern" url="pattern-DRV4.patt"> <!-- You can change 'kanji' to a different marker -->
-            <!-- GLB Model - Angle 4 Front -->
-            <a-entity
-              gltf-model="url(free_porsche_911_carrera_4s.glb)"
-              scale="0.4 0.4 0.4"
-              position="0 0 0"
-              rotation="-90 0 0">
-            </a-entity>
-        </a-marker>
-
-        <a-marker type="pattern" url="pattern-DRV5.patt"> <!-- You can change 'kanji' to a different marker -->
-            <!-- GLB Model - Angle 5 Back -->
-            <a-entity
-              gltf-model="url(free_porsche_911_carrera_4s.glb)"
-              scale="0.4 0.4 0.4"
-              position="0 0 0"
-              rotation="90 0 180">
-            </a-entity>
-        </a-marker>
-        
-        <a-marker type="pattern" url="pattern-DRV6.patt"> <!-- You can change 'kanji' to a different marker -->
-            <!-- GLB Model - Angle 5 bottom-->
-            <a-entity
-              gltf-model="url(free_porsche_911_carrera_4s.glb)"
-              scale="0.4 0.4 0.4"
-              position="0 0 0"
-              rotation="0 0 180">
-            </a-entity>
-        </a-marker>
         <!-- Camera -->
         <a-entity camera></a-entity>
-
-
     </a-scene>
 
     <script>
+        AFRAME.registerComponent('marker-visibility-handler', {
+            init: function () {
+                const model = document.getElementById('porscheModel');  // Reference to the Porsche model
+                const multiMarkerEntity = this.el;  // The multi-marker entity
+
+                // Show the model when a marker is detected
+                multiMarkerEntity.addEventListener('markerFound', () => {
+                    console.log('Marker detected');
+                    model.setAttribute('visible', 'true');
+                });
+
+                // Hide the model when no marker is detected
+                multiMarkerEntity.addEventListener('markerLost', () => {
+                    console.log('Marker lost');
+                    model.setAttribute('visible', 'false');
+                });
+            }
+        });
+
+        // Attach the component to the multi-marker entity
+        document.getElementById('multiMarker').setAttribute('marker-visibility-handler', '');
+
         async function initFrontCamera() {
             const constraints = {
                 video: {
@@ -118,7 +80,7 @@
                     height: { ideal: 720 }
                 }
             };
-    
+
             try {
                 const stream = await navigator.mediaDevices.getUserMedia(constraints);
                 const video = document.createElement('video');
@@ -127,7 +89,7 @@
                 video.setAttribute('muted', '');
                 video.setAttribute('playsinline', '');
                 document.body.appendChild(video);
-    
+
                 // Wait for the video stream to be ready
                 video.onloadedmetadata = () => {
                     const arSystem = document.querySelector('a-scene').systems['arjs'];
@@ -142,77 +104,10 @@
                 console.error('Error accessing front camera:', error);
             }
         }
-    
+
         window.onload = () => {
             initFrontCamera();
         };
-    
-        function changeModel(url) {
-            console.log('Changing model to: ' + url);
-            const sunglassesEntity = document.querySelector('#faceSunglassesModel');
-            sunglassesEntity.setAttribute('gltf-model', url);
-        }
-    
-        // Handle face tracking state
-        AFRAME.registerComponent('arjs-face-anchor', {
-            init: function () {
-                this.el.sceneEl.addEventListener('markerFound', (event) => {
-                    console.log('Face marker found');
-                    const faceSunglassesModel = document.querySelector('#faceSunglassesModel');
-                    faceSunglassesModel.setAttribute('visible', 'true');
-                    const staticSunglassesModel = document.querySelector('#sunglassesModel');
-                    staticSunglassesModel.setAttribute('visible', 'false');
-                });
-    
-                this.el.sceneEl.addEventListener('markerLost', (event) => {
-                    console.log('Face marker lost');
-                    const faceSunglassesModel = document.querySelector('#faceSunglassesModel');
-                    faceSunglassesModel.setAttribute('visible', 'false');
-                    const staticSunglassesModel = document.querySelector('#sunglassesModel');
-                    staticSunglassesModel.setAttribute('visible', 'true');
-                });
-    
-                this.el.sceneEl.addEventListener('faceUpdate', (event) => {
-                    const face = event.detail;
-                    const sunglassesModel = document.getElementById('faceSunglassesModel');
-                    if (face && sunglassesModel) {
-                        const leftEye = face.getLandmark('leftEye');
-                        const rightEye = face.getLandmark('rightEye');
-                        const nose = face.getLandmark('noseTip');
-    
-                        if (leftEye && rightEye && nose) {
-                            const eyeDistance = Math.sqrt(
-                                Math.pow(rightEye.x - leftEye.x, 2) +
-                                Math.pow(rightEye.y - leftEye.y, 2) +
-                                Math.pow(rightEye.z - leftEye.z, 2)
-                            );
-    
-                            console.log('Eye Distance:', eyeDistance);
-    
-                            const baseScale = 0.005;
-                            const scaleFactor = eyeDistance / 300;
-                            const scale = baseScale * scaleFactor;
-                            sunglassesModel.object3D.scale.set(scale, scale, scale);
-    
-                            const eyeMidPoint = {
-                                x: (leftEye.x + rightEye.x) / 2,
-                                y: (leftEye.y + rightEye.y) / 2,
-                                z: (leftEye.z + rightEye.z) / 2,
-                            };
-    
-                            sunglassesModel.object3D.position.set(eyeMidPoint.x, eyeMidPoint.y - (eyeDistance / 2), eyeMidPoint.z);
-    
-                            const rotationY = Math.atan2(rightEye.y - leftEye.y, rightEye.x - leftEye.x);
-                            sunglassesModel.object3D.rotation.set(0, rotationY, 0);
-    
-                            console.log('Adjusted Model scale:', sunglassesModel.object3D.scale);
-                            console.log('Adjusted Model position:', sunglassesModel.object3D.position);
-                            console.log('Adjusted Model rotation:', sunglassesModel.object3D.rotation);
-                        }
-                    }
-                });
-            }
-        });
     </script>
 </body>
 </html>
